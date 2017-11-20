@@ -35,7 +35,7 @@ func Cleanup() error {
 // Subdirectories are not supported. The Setup() function must be called first.
 func MkTemp(filename string) (*os.File, error) {
 	if Dir == "" {
-		panic("Dir is empty. Setup() needs to be called first.")
+		return nil, errors.New("MkTemp: Dir is empty. Setup() needs to be called first")
 	}
 
 	// Trim spaces for sanity.

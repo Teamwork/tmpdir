@@ -9,22 +9,38 @@ import (
 )
 
 func TestMkTemp(t *testing.T) {
-	err := Setup("tmpdir_test")
-	if err != nil {
-		t.Fatalf("Setup error: %v", err)
-	}
-	if _, err := os.Stat(Dir); err != nil {
-		t.Fatalf("Dir was not created: %v", err)
-	}
+	t.Run("no-Setup", func(t *testing.T) {
+		fp, err := MkTemp("asd")
+		if fp != nil {
+			t.Errorf("fp is not nil: %v", fp)
+		}
+
+		want := "Dir is empty"
+		if !test.ErrorContains(err, want) {
+			t.Fatalf("wrong error\nout:  %v\nwant: %#v\n", err, want)
+		}
+	})
+
+	t.Run("Setup", func(t *testing.T) {
+		err := Setup("tmpdir_test")
+		if err != nil {
+			t.Fatalf("Setup error: %v", err)
+		}
+		if _, err := os.Stat(Dir); err != nil {
+			t.Fatalf("Dir was not created: %v", err)
+		}
+	})
 
 	defer func() {
-		err := Cleanup()
-		if err != nil {
-			t.Errorf("Cleanup error: %v", err)
-		}
-		if _, err := os.Stat(Dir); err == nil {
-			t.Fatalf("Dir was not cleaned up: %v", err)
-		}
+		t.Run("Cleanup", func(t *testing.T) {
+			err := Cleanup()
+			if err != nil {
+				t.Errorf("Cleanup error: %v", err)
+			}
+			if _, err := os.Stat(Dir); err == nil {
+				t.Fatalf("Dir was not cleaned up: %v", err)
+			}
+		})
 	}()
 
 	cases := []struct {
