@@ -12,6 +12,5 @@ install:
 script:
   - cd $HOME/gopath/src/github.com/teamwork/tmpdir
   - ./bin/test
-  # No tests, so coverage is useless
-  #- ./bin/coverage
+  - ./bin/coverage
   - ./bin/lint
