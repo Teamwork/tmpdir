@@ -33,10 +33,12 @@ func Cleanup() error {
 // writable file descriptor. This function is safe for any arbitrary filename.
 //
 // Subdirectories are not supported. The Setup() function must be called first.
-func MkTemp(filename string) (*os.File, error) {
+func MkTemp(filename string, a ...interface{}) (*os.File, error) {
 	if Dir == "" {
 		return nil, errors.New("MkTemp: Dir is empty. Setup() needs to be called first")
 	}
+
+	filename = fmt.Sprintf(filename, a...)
 
 	// Trim spaces for sanity.
 	filename = strings.TrimSpace(filename)

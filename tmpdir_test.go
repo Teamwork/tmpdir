@@ -70,6 +70,17 @@ func TestMkTemp(t *testing.T) {
 			}
 		})
 	}
+
+	t.Run("format", func(t *testing.T) {
+		out, err := MkTemp("hello_%v_%v", "XXX", 42)
+		if err != nil {
+			t.Fatal(err)
+		}
+		want := Dir + "hello_XXX_42"
+		if out.Name() != want {
+			t.Errorf("\nout:  %#v\nwant: %#v\n", out.Name(), want)
+		}
+	})
 }
 
 func TestSplitExt(t *testing.T) {
