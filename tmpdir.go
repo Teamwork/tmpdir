@@ -87,6 +87,17 @@ func MkTemp(filename string, a ...interface{}) (*os.File, error) {
 	}
 }
 
+// MkTempFile behaves like MkTemp, but returns the path to a file (which is
+// created) instead of a file descriptor.
+func MkTempFile(filename string, a ...interface{}) (string, error) {
+	fp, err := MkTemp(filename, a...)
+	if err != nil {
+		return "", err
+	}
+	_ = fp.Close()
+	return fp.Name(), nil
+}
+
 // splitExt splits a path in the pathname without extension and the extension.
 func splitExt(path string) (string, string) {
 	for i := len(path) - 1; i >= 0 && !os.IsPathSeparator(path[i]); i-- {
