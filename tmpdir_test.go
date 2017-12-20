@@ -83,6 +83,29 @@ func TestMkTemp(t *testing.T) {
 	})
 }
 
+func TestMkTempFile(t *testing.T) {
+	err := Setup("tmpdir_test")
+	if err != nil {
+		t.Fatalf("Setup error: %v", err)
+	}
+
+	defer func() {
+		err := Cleanup()
+		if err != nil {
+			t.Errorf("Cleanup error: %v", err)
+		}
+	}()
+
+	f, err := MkTempFile("w00t")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err := os.Stat(f); err != nil {
+		t.Fatalf("file does not exist: %v", err)
+	}
+}
+
 func TestSplitExt(t *testing.T) {
 	cases := []struct {
 		in, wantBase, wantExt string
